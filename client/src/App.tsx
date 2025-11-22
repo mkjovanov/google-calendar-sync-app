@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
 import { fetchCurrentUser, fetchLocalEvents, logout } from './api';
 import type { User } from './types/user';
-import type { LocalCalendarEvent } from './types/localCalendarEvent';
-import { parseDateStringToUtc } from './utils/dateUtils';
+import type { GroupedLocalCalendarEvent } from './types/localCalendarEvent';
+import { groupEventsByDay, parseDateStringToUtc } from './utils/dateUtils';
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadingLocalCalendar, setLoadingLocalCalendar] = useState(true);
-  const [localCalendarEvents, setLocalCalendarEvents] = useState<LocalCalendarEvent[]>([])
+  const [localCalendarEvents, setLocalCalendarEvents] = useState<GroupedLocalCalendarEvent[]>([])
+  const [timeframe, setTimeFrame] = useState<1 | 7 | 30>(7);
 
   useEffect(() => {
     fetchCurrentUser()
@@ -19,12 +20,14 @@ function App() {
 
   useEffect(() => {
     if (user) {
-      fetchLocalEvents()
-        .then(setLocalCalendarEvents)
+      fetchLocalEvents(timeframe)
+        .then((events) => {
+          setLocalCalendarEvents(groupEventsByDay(events));
+        })
         .catch(() => setLocalCalendarEvents([]))
         .finally(() => setLoadingLocalCalendar(false));
     }
-  }, [user]);
+  }, [user, timeframe]);
 
   const handleLogin = () => {
     window.location.href = '/auth/google';
@@ -59,20 +62,35 @@ function App() {
           <div>
             <b>Your calendar events:</b>
             <br /><br />
+            <div style={{display: 'flex', flexDirection: 'column', gap: '1rem', width: '15rem'}}>
+              <div>Timeframe:</div>
+              <button onClick={() => {setTimeFrame(1)}} disabled={timeframe === 1}>1 day</button>
+              <button onClick={() => {setTimeFrame(7)}} disabled={timeframe === 7}>7 days</button>
+              <button onClick={() => {setTimeFrame(30)}} disabled={timeframe === 30}>30 days</button>
+            </div>
+            <br /><br />
             {loadingLocalCalendar && <>Loading calendar...</>}
-            {localCalendarEvents.map(val =>
-              <div>
-                ID: {val.id}
-                <br />
-                Google ID: {val.googleEventId}
-                <br />
-                Summary: {val.summary}
-                <br />
-                Start date time: {parseDateStringToUtc(val.start)}
-                <br />
-                End date time: {parseDateStringToUtc(val.end)}
-                <br /><br />
-              </div>
+            {localCalendarEvents.length === 0 && <>No events to display in next {timeframe} day{timeframe > 1 && 's'}</>}
+            {localCalendarEvents.map(groupedEvents =>
+              <>
+                <div>
+                  <b>Date: {groupedEvents.date}</b>
+                </div>
+                {groupedEvents.events.map(event =>
+                  <div>
+                    ID: {event.id}
+                    <br />
+                    Google ID: {event.googleEventId}
+                    <br />
+                    Summary: {event.summary}
+                    <br />
+                    Start date time: {parseDateStringToUtc(event.start)}
+                    <br />
+                    End date time: {parseDateStringToUtc(event.end)}
+                    <br /><br />
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

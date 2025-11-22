@@ -1,3 +1,4 @@
+
 export async function fetchCurrentUser() {
   const res = await fetch('/current-user', {
     credentials: 'include'
@@ -26,8 +27,8 @@ export async function fetchGoogleEvents() {
   return res.json();
 }
 
-export async function fetchLocalEvents() {
-  const res = await fetch("/calendar/local-events", {
+export async function fetchLocalEvents(timeframe: 1 | 7 | 30) {
+  const res = await fetch(`/calendar/local-events?timeframe=${timeframe}`, {
     credentials: "include"
   });
 

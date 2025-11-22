@@ -4,6 +4,7 @@ import { getGoogleClient } from "../google/googleClient";
 import { google } from "googleapis";
 import { prisma } from "../prisma";
 import { syncGoogleToLocal } from "../google/syncGoogleToLocal";
+import { getDateInFuture } from "../utils/dateUtils";
 
 const router = Router();
 
@@ -32,7 +33,19 @@ router.get('/local-events', requireAuth, async (req, res) => {
   const user = (req as any).currentUser;
   await syncGoogleToLocal(user);
 
-  const localEvents = await prisma.localEvent.findMany({});
+  const queryTimeframe = req.query['timeframe'] as string;
+
+  const localEvents = await prisma.localEvent.findMany({
+    where: {
+    start: {
+      gte: new Date(),
+      lte: getDateInFuture(parseInt(queryTimeframe || '7'))
+    }
+  },
+  orderBy: {
+    start: "asc"
+  }
+  });
 
   res.json(localEvents);
 });

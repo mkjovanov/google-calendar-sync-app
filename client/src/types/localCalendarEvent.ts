@@ -6,3 +6,8 @@ export interface LocalCalendarEvent {
     start: string;
     end: string;
 }
+
+export interface GroupedLocalCalendarEvent {
+    date: string;
+    events: LocalCalendarEvent[];
+}

@@ -1,7 +1,8 @@
 import { User } from "@prisma/client";
 import { fetchGoogleEvents } from "./fetchGoogleEvents";
 import { prisma } from "../prisma";
-import { getSyncWindow, safelyParseDateTime } from "./utils";
+import { getSyncWindow } from "./utils";
+import { safelyParseDateTime } from "../utils/dateUtils";
 
 export async function syncGoogleToLocal(user: User) {
     const googleEvents = await fetchGoogleEvents(user);
