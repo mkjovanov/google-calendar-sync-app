@@ -1,18 +1,13 @@
 import { useEffect, useState } from 'react';
 import { fetchCurrentUser, loadEvents, logout } from './api';
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  picture?: string;
-}
+import type { User } from './types/user';
+import type { CalendarEvent } from './types/calendarEvent';
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadingCalendar, setLoadingCalendar] = useState(true);
-  const [calendarEvents, setCalendarEvents] = useState<{id: string, summary: string}[]>([])
+  const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([])
 
   useEffect(() => {
     fetchCurrentUser()
