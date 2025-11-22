@@ -3,7 +3,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import authRoutes from './routes/auth';
-import meRoutes from './routes/current-user';
+import currentUserRoutes from './routes/current-user';
 import getPassportSetup from './config/passport';
 
 const app = express();
@@ -16,7 +16,7 @@ app.use(cookieParser());
 app.use(getPassportSetup().initialize());
 
 app.use('/auth', authRoutes);
-app.use('/me', meRoutes);
+app.use('/current-user', currentUserRoutes);
 
 app.get('/', (_req, res) => res.send('API running'));
 
