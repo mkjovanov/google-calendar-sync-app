@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import setupPassport from '../config/passport';
+import getPassportSetup from '../config/passport';
 import jwt from 'jsonwebtoken';
 
 const router = Router();
@@ -7,14 +7,14 @@ const router = Router();
 const CLIENT_URL = process.env.CLIENT_URL!;
 
 // Redirect to Google OAuth
-router.get('/google', setupPassport().authenticate('google', {
+router.get('/google', getPassportSetup().authenticate('google', {
   scope: ['profile', 'email']
 }));
 
 // Google callback
 router.get(
   '/google/callback',
-  setupPassport().authenticate('google', { session: false, failureRedirect: CLIENT_URL + '/login' }),
+  getPassportSetup().authenticate('google', { session: false, failureRedirect: CLIENT_URL + '/login' }),
   (req, res) => {
     const user = req.user as any;
 

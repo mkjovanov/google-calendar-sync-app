@@ -31,7 +31,7 @@ type GoogleVerifyFn = (
   done: VerifyCallback
 ) => void | Promise<void>;
 
-export default function setupPassport() {
+export default function getPassportSetup() {
   const options: StrategyOptions = {
     clientID: process.env.GOOGLE_CLIENT_ID!,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
