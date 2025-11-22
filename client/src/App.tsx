@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { fetchCurrentUser, loadEvents, logout } from './api';
 import type { User } from './types/user';
 import type { CalendarEvent } from './types/calendarEvent';
+import { safelyParseDateTime } from './utils/dateUtils';
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -64,6 +65,10 @@ function App() {
                 ID: {val.id}
                 <br />
                 Summary: {val.summary}
+                <br />
+                Start date time: {safelyParseDateTime(val.start.date, val.start.dateTime)}
+                <br />
+                End date time: {safelyParseDateTime(val.end.date, val.end.dateTime )}
                 <br /><br />
               </div>
             )}
