@@ -40,7 +40,8 @@ router.get('/local-events', requireAuth, async (req, res) => {
     start: {
       gte: new Date(),
       lte: getDateInFuture(parseInt(queryTimeframe || '7'))
-    }
+    },
+    deleted: false
   },
   orderBy: {
     start: "asc"

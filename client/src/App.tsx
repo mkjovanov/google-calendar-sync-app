@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { fetchCurrentUser, fetchLocalEvents, logout } from './api';
 import type { User } from './types/user';
 import type { GroupedLocalCalendarEvent } from './types/localCalendarEvent';
-import { groupEventsByDay, parseDateStringToUtc } from './utils/dateUtils';
+import { groupEventsByDay, groupEventsByWeek, parseDateStringToUtc } from './utils/dateUtils';
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -22,7 +22,7 @@ function App() {
     if (user) {
       fetchLocalEvents(timeframe)
         .then((events) => {
-          setLocalCalendarEvents(groupEventsByDay(events));
+          setLocalCalendarEvents(timeframe === 30 ? groupEventsByWeek(events) : groupEventsByDay(events));
         })
         .catch(() => setLocalCalendarEvents([]))
         .finally(() => setLoadingLocalCalendar(false));
@@ -37,6 +37,11 @@ function App() {
     await logout();
     setUser(null);
   };
+
+  const changeTimeframe = (timeframe: 1 | 7 | 30) => {
+    setTimeFrame(timeframe);
+    setLoadingLocalCalendar(true);
+  }
 
   if (loading) return <div>Loading…</div>;
 
@@ -64,9 +69,9 @@ function App() {
             <br /><br />
             <div style={{display: 'flex', flexDirection: 'column', gap: '1rem', width: '15rem'}}>
               <div>Timeframe:</div>
-              <button onClick={() => {setTimeFrame(1)}} disabled={timeframe === 1}>1 day</button>
-              <button onClick={() => {setTimeFrame(7)}} disabled={timeframe === 7}>7 days</button>
-              <button onClick={() => {setTimeFrame(30)}} disabled={timeframe === 30}>30 days</button>
+              <button onClick={() => {changeTimeframe(1)}} disabled={timeframe === 1}>1 day</button>
+              <button onClick={() => {changeTimeframe(7)}} disabled={timeframe === 7}>7 days</button>
+              <button onClick={() => {changeTimeframe(30)}} disabled={timeframe === 30}>30 days</button>
             </div>
             <br /><br />
             {loadingLocalCalendar && <>Loading calendar...</>}
@@ -74,7 +79,7 @@ function App() {
             {localCalendarEvents.map(groupedEvents =>
               <>
                 <div>
-                  <b>Date: {groupedEvents.date}</b>
+                  <h2>Date: {groupedEvents.date}</h2>
                 </div>
                 {groupedEvents.events.map(event =>
                   <div>
