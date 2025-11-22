@@ -7,7 +7,7 @@ const router = Router();
 const CLIENT_URL = process.env.CLIENT_URL!;
 
 router.get('/google', getPassportSetup().authenticate('google', {
-  scope: ['profile', 'email', "https://www.googleapis.com/auth/calendar.readonly"],
+  scope: ['profile', 'email', "https://www.googleapis.com/auth/calendar.events.owned"],
   // Guarantee that Google sends a refresh token.
   accessType: "offline",
   prompt: "consent"

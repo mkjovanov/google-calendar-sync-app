@@ -37,3 +37,19 @@ export async function fetchLocalEvents(timeframe: 1 | 7 | 30) {
   return res.json();
 }
 
+export async function addEvent(summary: string, startDate: string, endDate: string) {
+  const res = await fetch("/calendar/events", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({
+      summary: summary,
+      start: startDate,
+      end: endDate
+    })
+  });
+
+  const newEvent = await res.json();
+  console.log("Created:", newEvent);
+}
+

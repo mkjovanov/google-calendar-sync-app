@@ -5,6 +5,7 @@ import { google } from "googleapis";
 import { prisma } from "../prisma";
 import { syncGoogleToLocal } from "../google/syncGoogleToLocal";
 import { getDateInFuture } from "../utils/dateUtils";
+import { createEventForUser } from "../google/createEventForUser";
 
 const router = Router();
 
@@ -49,6 +50,24 @@ router.get('/local-events', requireAuth, async (req, res) => {
   });
 
   res.json(localEvents);
+});
+
+router.post("/events", requireAuth, async (req, res) => {
+  const user = (req as any).currentUser;
+  const { summary, start, end } = req.body;
+
+  try {
+    const event = await createEventForUser(user, {
+      summary,
+      start,
+      end
+    });
+
+    res.json(event);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to create event" });
+  }
 });
 
 export default router;
