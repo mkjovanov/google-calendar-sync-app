@@ -84,6 +84,12 @@ cd ../client
 npm install
 ```
 
+### **Shared**
+```
+cd ../
+npm i concurrently
+```
+
 ---
 
 # 🛢️ Database Setup (PostgreSQL)
