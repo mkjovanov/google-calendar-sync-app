@@ -5,6 +5,7 @@ import cors from 'cors';
 import authRoutes from './routes/auth';
 import currentUserRoutes from './routes/current-user';
 import getPassportSetup from './config/passport';
+import calendarRoutes from "./routes/calendar";
 
 const app = express();
 const PORT = process.env.PORT!;
@@ -17,6 +18,8 @@ app.use(getPassportSetup().initialize());
 
 app.use('/auth', authRoutes);
 app.use('/current-user', currentUserRoutes);
+app.use("/calendar", calendarRoutes);
+
 
 app.get('/', (_req, res) => res.send('API running'));
 

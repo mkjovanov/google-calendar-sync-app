@@ -15,3 +15,14 @@ export async function logout() {
     credentials: 'include'
   });
 }
+
+export async function loadEvents() {
+  const res = await fetch("/calendar/events", {
+    credentials: "include"
+  });
+
+  if (!res.ok) throw new Error("Failed to load calendar events");
+
+  return res.json();
+}
+
