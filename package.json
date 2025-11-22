@@ -1,5 +1,5 @@
 {
-  "name": "google-calendar-oauth",
+  "name": "google-calendar-sync-app",
   "version": "1.0.0",
   "scripts": {
     "dev": "concurrently \"npm --prefix server run dev\" \"npm --prefix client run dev\""

@@ -26,7 +26,7 @@ export const CalendarEventList: FC<CalendarEventListProps> = ({onAddFormCallback
         if (user) {
         fetchLocalEvents(timeframe)
             .then((events) => {
-            setLocalCalendarEvents(timeframe === 30 ? groupEventsByWeek(events) : groupEventsByDay(events));
+                setLocalCalendarEvents(timeframe === 30 ? groupEventsByWeek(events) : groupEventsByDay(events));
             })
             .catch(() => setLocalCalendarEvents([]))
             .finally(() => setLoadingLocalCalendar(false));

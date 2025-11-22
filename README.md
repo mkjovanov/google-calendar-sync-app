@@ -299,14 +299,3 @@ https://www.googleapis.com/auth/calendar.events
 Token refresh, sync window, and timestamps must also be valid.
 
 ---
-
-# 🎉 All Set!
-
-This README includes:
-
-- Installation  
-- Database initialization via Prisma  
-- How to run everything  
-- Troubleshooting  
-
-If you want, I can generate a Docker setup or full deployment guide!
