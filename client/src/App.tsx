@@ -1,35 +1,63 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from 'react';
+import { fetchCurrentUser, logout } from './api';
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  picture?: string;
 }
 
-export default App
+function App() {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchCurrentUser()
+      .then(setUser)
+      .catch(() => setUser(null))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const handleLogin = () => {
+    window.location.href = '/auth/google';
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    setUser(null);
+  };
+
+  if (loading) return <div>Loading…</div>;
+
+  return (
+    <div style={{ padding: '2rem', fontFamily: 'system-ui' }}>
+      <h1>Google OAuth Kickstart</h1>
+
+      {!user && (
+        <>
+          <p>You are not logged in.</p>
+          <button onClick={handleLogin}>Sign in with Google</button>
+        </>
+      )}
+
+      {user && (
+        <div>
+          <p>Welcome, {user.name}</p>
+          <p>{user.email}</p>
+          {user.picture && (
+            <img
+              src={user.picture}
+              alt={user.name}
+              style={{ width: 80, height: 80, borderRadius: '50%' }}
+            />
+          )}
+          <br />
+          <button onClick={handleLogout}>Logout</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default App;
