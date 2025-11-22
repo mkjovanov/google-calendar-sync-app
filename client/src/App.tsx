@@ -45,13 +45,6 @@ function App() {
         <div>
           <p>Welcome, {user.name}</p>
           <p>{user.email}</p>
-          {user.picture && (
-            <img
-              src={user.picture}
-              alt={user.name}
-              style={{ width: 80, height: 80, borderRadius: '50%' }}
-            />
-          )}
           <br />
           <button onClick={handleLogout}>Logout</button>
         </div>
