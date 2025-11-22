@@ -6,12 +6,10 @@ const router = Router();
 
 const CLIENT_URL = process.env.CLIENT_URL!;
 
-// Redirect to Google OAuth
 router.get('/google', getPassportSetup().authenticate('google', {
   scope: ['profile', 'email']
 }));
 
-// Google callback
 router.get(
   '/google/callback',
   getPassportSetup().authenticate('google', { session: false, failureRedirect: CLIENT_URL + '/login' }),

@@ -32,7 +32,7 @@ function App() {
 
   return (
     <div style={{ padding: '2rem', fontFamily: 'system-ui' }}>
-      <h1>Google OAuth Kickstart</h1>
+      <h1>Google Calendar OAuth</h1>
 
       {!user && (
         <>
