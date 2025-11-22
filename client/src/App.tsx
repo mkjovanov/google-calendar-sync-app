@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
-import { fetchCurrentUser, loadEvents, logout } from './api';
+import { fetchCurrentUser, fetchLocalEvents, logout } from './api';
 import type { User } from './types/user';
-import type { CalendarEvent } from './types/calendarEvent';
-import { safelyParseDateTime } from './utils/dateUtils';
+import type { LocalCalendarEvent } from './types/localCalendarEvent';
+import { parseDateStringToUtc } from './utils/dateUtils';
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [loadingCalendar, setLoadingCalendar] = useState(true);
-  const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([])
+  const [loadingLocalCalendar, setLoadingLocalCalendar] = useState(true);
+  const [localCalendarEvents, setLocalCalendarEvents] = useState<LocalCalendarEvent[]>([])
 
   useEffect(() => {
     fetchCurrentUser()
@@ -19,10 +19,10 @@ function App() {
 
   useEffect(() => {
     if (user) {
-      loadEvents()
-        .then(setCalendarEvents)
-        .catch(() => setCalendarEvents([]))
-        .finally(() => setLoadingCalendar(false));
+      fetchLocalEvents()
+        .then(setLocalCalendarEvents)
+        .catch(() => setLocalCalendarEvents([]))
+        .finally(() => setLoadingLocalCalendar(false));
     }
   }, [user]);
 
@@ -59,16 +59,18 @@ function App() {
           <div>
             <b>Your calendar events:</b>
             <br /><br />
-            {loadingCalendar && <>Loading calendar...</>}
-            {calendarEvents.map(val =>
+            {loadingLocalCalendar && <>Loading calendar...</>}
+            {localCalendarEvents.map(val =>
               <div>
                 ID: {val.id}
                 <br />
+                Google ID: {val.googleEventId}
+                <br />
                 Summary: {val.summary}
                 <br />
-                Start date time: {safelyParseDateTime(val.start.date, val.start.dateTime)}
+                Start date time: {parseDateStringToUtc(val.start)}
                 <br />
-                End date time: {safelyParseDateTime(val.end.date, val.end.dateTime )}
+                End date time: {parseDateStringToUtc(val.end)}
                 <br /><br />
               </div>
             )}

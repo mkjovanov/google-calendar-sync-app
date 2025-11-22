@@ -16,12 +16,22 @@ export async function logout() {
   });
 }
 
-export async function loadEvents() {
+export async function fetchGoogleEvents() {
   const res = await fetch("/calendar/events", {
     credentials: "include"
   });
 
   if (!res.ok) throw new Error("Failed to load calendar events");
+
+  return res.json();
+}
+
+export async function fetchLocalEvents() {
+  const res = await fetch("/calendar/local-events", {
+    credentials: "include"
+  });
+
+  if (!res.ok) throw new Error("Failed to load local calendar events");
 
   return res.json();
 }

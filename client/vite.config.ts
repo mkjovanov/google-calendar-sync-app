@@ -8,7 +8,8 @@ export default defineConfig({
     proxy: {
       '/auth': 'http://localhost:4000',
       '/current-user': 'http://localhost:4000',
-      '/calendar/events': 'http://localhost:4000'
+      '/calendar/events': 'http://localhost:4000',
+      '/calendar/local-events': 'http://localhost:4000',
     }
   }
 });

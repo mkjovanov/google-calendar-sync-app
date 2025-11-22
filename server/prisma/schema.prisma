@@ -19,4 +19,22 @@ model User {
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  
+  lastCalendarSync DateTime?
+  events LocalEvent[]
+}
+
+model LocalEvent {
+  id              String   @id @default(cuid())
+  userId          String
+  googleEventId   String?  @unique
+  summary         String?
+  description     String?
+  start           DateTime?
+  end             DateTime?
+  lastLocalEdit   DateTime @default(now())
+  lastGoogleEdit  DateTime?
+  deleted         Boolean  @default(false)
+
+  user User @relation(fields: [userId], references: [id])
 }

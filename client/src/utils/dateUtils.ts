@@ -1,13 +1,5 @@
-const safelyParseDateTime = (date?: string, dateTime?: string) => {
-    let retVal = new Date();
-
-    if (dateTime) {
-        retVal = new Date(dateTime);
-    } else if (date) {
-        retVal = new Date(date);
-    }
-
-    return date || dateTime ? retVal.toUTCString() : 'n/a';
+const parseDateStringToUtc = (date?: string) => {
+    return date ? new Date(date).toUTCString() : 'n/a';
 }
 
-export {safelyParseDateTime}
+export { parseDateStringToUtc }

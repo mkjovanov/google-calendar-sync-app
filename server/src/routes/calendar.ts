@@ -2,6 +2,8 @@ import { Router } from "express";
 import { requireAuth } from "../middleware/auth";
 import { getGoogleClient } from "../google/googleClient";
 import { google } from "googleapis";
+import { prisma } from "../prisma";
+import { syncGoogleToLocal } from "../google/syncGoogleToLocal";
 
 const router = Router();
 
@@ -24,6 +26,15 @@ router.get("/events", requireAuth, async (req, res) => {
     console.error(err);
     res.status(500).json({ error: "Failed to load calendar events" });
   }
+});
+
+router.get('/local-events', requireAuth, async (req, res) => {
+  const user = (req as any).currentUser;
+  await syncGoogleToLocal(user);
+
+  const localEvents = await prisma.localEvent.findMany({});
+
+  res.json(localEvents);
 });
 
 export default router;
