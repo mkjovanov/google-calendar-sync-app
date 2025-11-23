@@ -1,11 +1,12 @@
+import { User } from "@prisma/client";
 import passport from "passport";
 import {
-    Strategy as GoogleStrategy,
-    StrategyOptions,
-    VerifyCallback,
+  Strategy as GoogleStrategy,
+  StrategyOptions,
+  VerifyCallback,
 } from "passport-google-oauth20";
+
 import { prisma } from "../prisma";
-import { User } from "@prisma/client";
 
 interface GoogleAuthParams {
   access_token: string;
@@ -28,7 +29,7 @@ type GoogleVerifyFn = (
   refreshToken: string,
   params: GoogleAuthParams,
   profile: GoogleProfile,
-  done: VerifyCallback
+  done: VerifyCallback,
 ) => void | Promise<void>;
 
 export default function getPassportSetup() {
@@ -38,13 +39,7 @@ export default function getPassportSetup() {
     callbackURL: process.env.GOOGLE_CALLBACK_URL!,
   };
 
-  const verify: GoogleVerifyFn = async (
-    accessToken,
-    refreshToken,
-    params,
-    profile,
-    done
-  ) => {
+  const verify: GoogleVerifyFn = async (accessToken, refreshToken, params, profile, done) => {
     try {
       const tokenExpiresAt = params.expires_in
         ? new Date(Date.now() + params.expires_in * 1000)

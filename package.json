@@ -2,9 +2,15 @@
   "name": "google-calendar-sync-app",
   "version": "1.0.0",
   "scripts": {
-    "dev": "concurrently \"npm --prefix server run dev\" \"npm --prefix client run dev\""
+    "dev": "concurrently \"npm --prefix server run dev\" \"npm --prefix client run dev\"",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "concurrently": "^9.2.1"
+  },
+  "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^6.0.0",
+    "prettier": "^3.6.2"
   }
 }

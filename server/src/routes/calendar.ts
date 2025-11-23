@@ -1,11 +1,12 @@
 import { Router } from "express";
-import { requireAuth } from "../middleware/auth";
-import { getGoogleClient } from "../google/googleClient";
 import { google } from "googleapis";
-import { prisma } from "../prisma";
-import { syncGoogleToLocal } from "../google/syncGoogleToLocal";
-import { getDateInFuture } from "../utils/dateUtils";
+
 import { createEventForUser } from "../google/createEventForUser";
+import { getGoogleClient } from "../google/googleClient";
+import { syncGoogleToLocal } from "../google/syncGoogleToLocal";
+import { requireAuth } from "../middleware/auth";
+import { prisma } from "../prisma";
+import { getDateInFuture } from "../utils/dateUtils";
 
 const router = Router();
 
@@ -20,7 +21,7 @@ router.get("/events", requireAuth, async (req, res) => {
       maxResults: 20,
       singleEvents: true,
       orderBy: "startTime",
-      timeMin: new Date().toISOString()
+      timeMin: new Date().toISOString(),
     });
 
     res.json(events.data.items || []);
@@ -30,23 +31,23 @@ router.get("/events", requireAuth, async (req, res) => {
   }
 });
 
-router.get('/local-events', requireAuth, async (req, res) => {
+router.get("/local-events", requireAuth, async (req, res) => {
   const user = (req as any).currentUser;
   await syncGoogleToLocal(user);
 
-  const queryTimeframe = req.query['timeframe'] as string;
+  const queryTimeframe = req.query["timeframe"] as string;
 
   const localEvents = await prisma.localEvent.findMany({
     where: {
-    start: {
-      gte: new Date(),
-      lte: getDateInFuture(parseInt(queryTimeframe || '7'))
+      start: {
+        gte: new Date(),
+        lte: getDateInFuture(parseInt(queryTimeframe || "7")),
+      },
+      deleted: false,
     },
-    deleted: false
-  },
-  orderBy: {
-    start: "asc"
-  }
+    orderBy: {
+      start: "asc",
+    },
   });
 
   res.json(localEvents);
@@ -60,7 +61,7 @@ router.post("/events", requireAuth, async (req, res) => {
     const event = await createEventForUser(user, {
       summary,
       start,
-      end
+      end,
     });
 
     res.json(event);
