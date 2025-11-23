@@ -3,6 +3,20 @@
 Bidirectional Google Calendar ↔ Local PostgreSQL App  
 React + Node.js + Prisma + Passport OAuth2 + TypeScript
 
+## 📚 Table of Contents
+
+- [🚀 Features](#-features)
+- [📦 Tech Stack](#-tech-stack)
+- [🗂 Project Structure](#-project-structure)
+- [🛠️ First-Time Setup](#️-first-time-setup)
+- [🛢️ Database Setup](#️-database-setup-postgresql)
+- [🎨 Prettier Setup](#-prettier-setup)
+- [🏗️ Project Build Setup](#️-project-build-setup-production)
+- [▶️ Running the App](#️-running-the-app)
+- [⚙️ Environment Variables](#️-environment-variables-summary)
+- [🧪 Testing OAuth Login](#-testing-oauth-login)
+- [🔧 Troubleshooting](#-troubleshooting)
+
 ---
 
 # 🚀 Features
@@ -167,6 +181,100 @@ npx prisma db seed
 ```
 npx prisma studio
 ```
+
+---
+
+# 📦 Build Setup
+
+This document contains only the **build-related setup** for the project.
+
+---
+
+## 🚀 Backend Build (server)
+
+### Commands
+
+```bash
+cd server
+npm run build
+npm start
+```
+
+### Required `server/package.json` scripts
+
+```json
+{
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  }
+}
+```
+
+### Output directory
+
+```
+server/dist/
+```
+
+---
+
+## 🖥️ Frontend Build (client)
+
+### Commands
+
+```bash
+cd client
+npm run build
+npm run preview
+```
+
+### Required `client/package.json` scripts
+
+```json
+{
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  }
+}
+```
+
+### Output directory
+
+```
+client/dist/
+```
+
+---
+
+## 🔧 Root Build (build both client + server)
+
+### Command
+
+```bash
+npm run build
+```
+
+### Required root `package.json` scripts
+
+```json
+{
+  "scripts": {
+    "dev": "concurrently \"npm --prefix server run dev\" \"npm --prefix client run dev\"",
+    "build": "npm --prefix server run build && npm --prefix client run build"
+  }
+}
+```
+
+---
+
+## 📁 Build Output Summary
+
+- Backend compiled to: `server/dist/`
+- Frontend compiled to: `client/dist/`
 
 ---
 
