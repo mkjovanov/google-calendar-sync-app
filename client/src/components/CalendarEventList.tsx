@@ -3,17 +3,25 @@ import { type FC, useEffect, useState } from "react";
 import { fetchCurrentUser, fetchLocalEvents, logout } from "../api";
 import type { GroupedLocalCalendarEvent } from "../types/localCalendarEvent";
 import type { User } from "../types/user";
-import { groupEventsByDay, groupEventsByWeek, parseDateStringToUtc } from "../utils/dateUtils";
+import {
+  groupEventsByDay,
+  groupEventsByWeek,
+  parseDateStringToUtc,
+} from "../utils/dateUtils";
 
 interface CalendarEventListProps {
   onAddFormCallback: VoidFunction;
 }
 
-export const CalendarEventList: FC<CalendarEventListProps> = ({ onAddFormCallback }) => {
+export const CalendarEventList: FC<CalendarEventListProps> = ({
+  onAddFormCallback,
+}) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadingLocalCalendar, setLoadingLocalCalendar] = useState(true);
-  const [localCalendarEvents, setLocalCalendarEvents] = useState<GroupedLocalCalendarEvent[]>([]);
+  const [localCalendarEvents, setLocalCalendarEvents] = useState<
+    GroupedLocalCalendarEvent[]
+  >([]);
   const [timeframe, setTimeFrame] = useState<1 | 7 | 30>(7);
 
   useEffect(() => {
@@ -28,7 +36,9 @@ export const CalendarEventList: FC<CalendarEventListProps> = ({ onAddFormCallbac
       fetchLocalEvents(timeframe)
         .then((events) => {
           setLocalCalendarEvents(
-            timeframe === 30 ? groupEventsByWeek(events) : groupEventsByDay(events),
+            timeframe === 30
+              ? groupEventsByWeek(events)
+              : groupEventsByDay(events),
           );
         })
         .catch(() => setLocalCalendarEvents([]))
@@ -54,7 +64,7 @@ export const CalendarEventList: FC<CalendarEventListProps> = ({ onAddFormCallbac
 
   return (
     <div style={{ padding: "2rem", fontFamily: "system-ui" }}>
-      <h1>Google Calendar OAuth</h1>
+      <h1>Google Calendar Sync App</h1>
 
       {!user && (
         <>

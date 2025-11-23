@@ -45,11 +45,33 @@ export const AddCalendarEventForm: FC<AddCalendarEventFormProps> = ({
       }}
       onSubmit={handleSubmit}
     >
-      <button onClick={onBackToEventListCallback}>&#8249; Back to event list</button>
-      <input type="text" placeholder="Event name" onChange={handleChange} name="name"></input>
-      <input type="date" placeholder="Date" onChange={handleChange} name="date"></input>
-      <input type="time" placeholder="Start time" onChange={handleChange} name="startTime"></input>
-      <input type="time" placeholder="End time" onChange={handleChange} name="endTime"></input>
+      <button onClick={onBackToEventListCallback}>
+        &#8249; Back to event list
+      </button>
+      <input
+        type="text"
+        placeholder="Event name"
+        onChange={handleChange}
+        name="name"
+      ></input>
+      <input
+        type="date"
+        placeholder="Date"
+        onChange={handleChange}
+        name="date"
+      ></input>
+      <input
+        type="time"
+        placeholder="Start time"
+        onChange={handleChange}
+        name="startTime"
+      ></input>
+      <input
+        type="time"
+        placeholder="End time"
+        onChange={handleChange}
+        name="endTime"
+      ></input>
       <button type="submit">Add event</button>
     </form>
   );
